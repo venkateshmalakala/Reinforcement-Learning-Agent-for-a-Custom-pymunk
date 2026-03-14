@@ -1,0 +1,7 @@
+pygame==2.5.2
+pymunk==6.6.0
+stable-baselines3[extra]==2.2.1
+torch
+pandas
+matplotlib
+imageio
