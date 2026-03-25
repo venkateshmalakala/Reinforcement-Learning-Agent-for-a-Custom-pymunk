@@ -1,7 +1,9 @@
-pygame==2.5.2
+gymnasium==0.29.1
 pymunk==6.6.0
+pygame==2.5.2
 stable-baselines3[extra]==2.2.1
-torch
-pandas
-matplotlib
-imageio
+torch==2.1.2
+pandas==2.1.4
+matplotlib==3.8.2
+imageio==2.33.1
+imageio-ffmpeg==0.4.9

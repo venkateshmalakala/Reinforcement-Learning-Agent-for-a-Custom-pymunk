@@ -1,34 +1,21 @@
-import os
 import pandas as pd
 import matplotlib.pyplot as plt
-from stable_baselines3.common.results_plotter import load_results, ts2xy
+import glob
+import os
 
-def generate_plot():
+def plot_results():
     plt.figure(figsize=(10, 6))
+    for log_file in glob.glob("logs/*.csv"):
+        label = os.path.basename(log_file).replace(".monitor.csv", "")
+        data = pd.read_csv(log_file, skiprows=1)
+        plt.plot(data.index, data['r'].rolling(window=50).mean(), label=label)
     
-    def plot_log_data(log_dir, label):
-        if os.path.exists(log_dir):
-            df = load_results(log_dir)
-            if len(df) > 0:
-                x, y = ts2xy(df, 'timesteps')
-                # Apply a rolling window to smooth the noisy RL data
-                y_smoothed = pd.Series(y).rolling(window=50, min_periods=1).mean()
-                plt.plot(x, y_smoothed, label=label, linewidth=2)
-
-    # Plot both reward types
-    plot_log_data('logs/baseline', 'Baseline Reward')
-    plot_log_data('logs/shaped', 'Shaped Reward')
-
-    # Formatting the chart
-    plt.title('Learning Curve Comparison: Baseline vs. Shaped Reward')
-    plt.xlabel('Timesteps')
-    plt.ylabel('Mean Reward')
+    plt.title("Learning Curves: Baseline vs Shaped Reward")
+    plt.xlabel("Episodes")
+    plt.ylabel("Mean Reward")
     plt.legend()
-    plt.grid(True)
-    
-    # Save to root directory
-    plt.savefig('reward_comparison.png')
-    print("Plot successfully generated and saved as 'reward_comparison.png'")
+    plt.savefig("reward_comparison.png")
+    plt.show()
 
-if __name__ == '__main__':
-    generate_plot()
+if __name__ == "__main__":
+    plot_results()
